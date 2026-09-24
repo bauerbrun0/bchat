@@ -13,7 +13,8 @@
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
     "lint": "oxlint",
-    "lint:fix": "oxlint --fix"
+    "lint:fix": "oxlint --fix",
+    "prepare": "husky"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
@@ -41,12 +42,15 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.2.3",
+    "@commitlint/config-conventional": "^21.2.3",
     "@tanstack/devtools-vite": "latest",
     "@tanstack/router-cli": "^1.132.0",
     "@types/node": "^22.10.2",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^6.0.1",
+    "husky": "^9.1.7",
     "oxfmt": "^0.70.0",
     "oxlint": "^1.85.0",
     "typescript": "^6.0.2",

@@ -1,18 +1,51 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { Button } from '@/components/ui/button'
+import { useQuery } from "@tanstack/react-query";
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
 
-export const Route = createFileRoute('/')({ component: Home })
+import { useTRPC } from "#/trpc/client/react";
+
+export const Route = createFileRoute("/")({
+  component: Home,
+  loader: async ({ context }) => {
+    return await context.queryClient.query(context.trpc.users.list.queryOptions());
+  },
+});
 
 function Home() {
+  const users = Route.useLoaderData();
+
+  const trpc = useTRPC();
+  const { data, isPending, isRefetching, isError, error, refetch } = useQuery(
+    trpc.users.list.queryOptions(),
+  );
+
+  useEffect(() => {
+    setTimeout(() => {
+      refetch();
+      console.log("refetching");
+    }, 2000);
+  }, []);
+
+  useEffect(() => {
+    console.log(isPending);
+  }, [isPending]);
+
   return (
-    <div className="p-8">
-      <h1 className="text-4xl font-bold">Welcome to TanStack Start</h1>
-      <p className="mt-4 text-lg">
-        Edit <code>src/routes/index.tsx</code> to get started.
-      </p>
-      <Button>
-        Click me
-      </Button>
+    <div>
+      <div>
+        {users.map((u) => (
+          <p key={u.id}>{u.username}</p>
+        ))}
+      </div>
+      <div>
+        {isPending || isRefetching ? (
+          <span>loading...</span>
+        ) : isError ? (
+          <span>Error: {error.message}</span>
+        ) : (
+          data.map((u) => <p key={u.id}>{u.username}</p>)
+        )}
+      </div>
     </div>
-  )
+  );
 }

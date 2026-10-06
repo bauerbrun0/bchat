@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { createRouter as createTanStackRouter } from "@tanstack/react-router";
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
 
-import { getContext } from "#/tanstack-query/context";
+import { getContext } from "#/routerContext";
 import { trpcClient } from "#/trpc/client";
 import { TRPCProvider } from "#/trpc/client/react";
 

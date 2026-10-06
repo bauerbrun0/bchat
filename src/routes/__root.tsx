@@ -1,19 +1,13 @@
-import type { QueryClient } from "@tanstack/react-query";
-import type { TRPCOptionsProxy } from "@trpc/tanstack-react-query";
-
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { HeadContent, Scripts, createRootRouteWithContext } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 
-import type { TRPCRouter } from "#/trpc/server/router";
+import type { RouterContext } from "#/routerContext";
+
+import { Toaster } from "@/components/ui/toast";
 
 import appCss from "../styles.css?url";
-
-interface RouterContext {
-  queryClient: QueryClient;
-  trpc: TRPCOptionsProxy<TRPCRouter>;
-}
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({
@@ -26,7 +20,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "TanStack Start Starter",
+        title: "bchat",
       },
     ],
     links: [
@@ -41,7 +35,7 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <head>
         <HeadContent />
       </head>
@@ -63,6 +57,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           ]}
         />
         <Scripts />
+        <Toaster />
       </body>
     </html>
   );

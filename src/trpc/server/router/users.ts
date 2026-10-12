@@ -2,7 +2,7 @@ import type { TRPCRouterRecord } from "@trpc/server";
 
 import { z } from "zod";
 
-import { newUserSchema } from "#/schemas/user";
+import { loginSchema, newUserSchema } from "#/schemas/user";
 import serverInfoService from "#/services/serverInfoService";
 import userService from "#/services/userService";
 
@@ -27,6 +27,9 @@ const usersRouter = {
       await serverInfoService.refreshIsInitialized();
       return user;
     }),
+  loginUser: initializedServerProcedure.input(loginSchema).mutation(async ({ _input }) => {
+    throw new Error("Not implemented.");
+  }),
 } satisfies TRPCRouterRecord;
 
 export default usersRouter;

@@ -13,12 +13,12 @@ import {
   CardHeader,
   CardTitle,
 } from "#/components/ui/card";
+import { Field, FieldDescription, FieldGroup, FieldLabel } from "#/components/ui/field";
 import { Input } from "#/components/ui/input";
+import { Spinner } from "#/components/ui/spinner";
+import { toast } from "#/components/ui/toast";
 import { useTRPC } from "#/trpc/client/react";
 import { isCustomTRPCClientValidationError } from "#/trpc/client/utils";
-import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
-import { Spinner } from "@/components/ui/spinner";
-import { toast } from "@/components/ui/toast";
 
 export const Route = createFileRoute("/setup")({
   component: RouteComponent,
@@ -46,7 +46,7 @@ function RouteComponent() {
         confirmPassword,
         isAdmin: true,
       });
-      navigate({ to: "/" });
+      navigate({ to: "/login" });
       toast.add({
         type: "success",
         title: "Server setup successful.",

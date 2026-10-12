@@ -31,3 +31,8 @@ export const newUserSchema = z
     error: "Passwords do not match.",
     path: ["confirmPassword"],
   });
+
+export const loginSchema = z.object({
+  username: z.string().nonempty("Username is required."),
+  password: z.string().nonempty("Password is required."),
+});

@@ -9,3 +9,9 @@ export class InitialUserNotAdminError extends Error {
     super("The initial user must be an admin user");
   }
 }
+
+export class PasswordHashError extends Error {
+  constructor() {
+    super("An error happened while password hashing");
+  }
+}

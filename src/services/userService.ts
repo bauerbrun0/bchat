@@ -1,10 +1,14 @@
+import argon2 from "argon2";
 import { z } from "zod";
 
 import { db } from "#/db";
+import logger from "#/lib/logger";
 import userRepository from "#/repositories/userRepository";
 import { userSchema, newUserSchema } from "#/schemas/user";
 
-import { AdminUserAlreadyExistsError, InitialUserNotAdminError } from "./errors";
+import { AdminUserAlreadyExistsError, InitialUserNotAdminError, PasswordHashError } from "./errors";
+
+const log = logger.child({ module: "userService" });
 
 export type User = z.infer<typeof userSchema>;
 export type SafeUser = Omit<User, "passwordHash">;
@@ -24,7 +28,7 @@ async function create(user: NewUser): Promise<SafeUser> {
     user: {
       username: user.username,
       isAdmin: user.isAdmin,
-      passwordHash: "passwordHash",
+      passwordHash: await hashPassword(user.password),
       createdAt: new Date(),
     },
   });
@@ -45,12 +49,23 @@ async function createInitialAdminUser(user: NewUser): Promise<SafeUser> {
       user: {
         username: user.username,
         isAdmin: true,
-        passwordHash: "passwordHash",
+        passwordHash: await hashPassword(user.password),
         createdAt: new Date(),
       },
     });
     return toSafeUser(createdUser);
   });
+}
+
+async function hashPassword(password: string) {
+  try {
+    return await argon2.hash(password);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      log.error("Password hashing failed", { error: error.message });
+    }
+    throw new PasswordHashError();
+  }
 }
 
 function toSafeUser(user: User): SafeUser {

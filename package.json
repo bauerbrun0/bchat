@@ -17,10 +17,12 @@
     "prepare": "husky",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "auth:generate-schema": "pnpm dlx auth@latest generate --output ./src/db/schema/auth.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
+    "@better-auth/drizzle-adapter": "^1.7.7",
     "@fontsource-variable/geist": "^5.3.0",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-devtools": "latest",
@@ -33,7 +35,7 @@
     "@trpc/client": "^11.19.0",
     "@trpc/server": "^11.19.0",
     "@trpc/tanstack-react-query": "^11.19.0",
-    "argon2": "^0.45.1",
+    "better-auth": "^1.7.7",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.3.2",
     "dotenv": "^18.0.3",

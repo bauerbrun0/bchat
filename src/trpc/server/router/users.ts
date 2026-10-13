@@ -12,22 +12,19 @@ const usersRouter = {
   getAll: initializedServerProcedure.query(async () => {
     return await userService.getAll();
   }),
-  getById: initializedServerProcedure.input(z.number()).query(async ({ input }) => {
+  getById: initializedServerProcedure.input(z.string()).query(async ({ input }) => {
     const user = await userService.getById(input);
-    return user;
-  }),
-  create: initializedServerProcedure.input(newUserSchema).mutation(async ({ input }) => {
-    const user = await userService.create(input);
     return user;
   }),
   createInitialAdminUser: uninitializedServerProcedure
     .input(newUserSchema)
     .mutation(async ({ input }) => {
-      const user = await userService.createInitialAdminUser(input);
+      const user = await userService.createInitialAdmin(input);
       await serverInfoService.refreshIsInitialized();
       return user;
     }),
-  loginUser: initializedServerProcedure.input(loginSchema).mutation(async ({ _input }) => {
+  loginUser: initializedServerProcedure.input(loginSchema).mutation(async ({ input }) => {
+    console.log(input);
     throw new Error("Not implemented.");
   }),
 } satisfies TRPCRouterRecord;

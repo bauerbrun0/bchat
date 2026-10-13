@@ -1,47 +1,45 @@
-import { and, count, eq, isNull } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 
 import type { Transaction } from "#/db";
 
 import { db } from "#/db";
-import { usersTable } from "#/db/schema";
+import { user as userTable } from "#/db/schema/auth";
 
-export type NewUser = typeof usersTable.$inferInsert;
-export type User = typeof usersTable.$inferSelect;
+export type User = typeof userTable.$inferSelect;
 
 async function getAll(): Promise<User[]> {
-  return await db.select().from(usersTable).where(isNull(usersTable.deletedAt));
+  return await db.select().from(userTable);
 }
 
-async function getById(id: number): Promise<User | null> {
-  const user = await db.select().from(usersTable).where(eq(usersTable.id, id));
+async function getById(id: string): Promise<User | null> {
+  const user = await db.select().from(userTable).where(eq(userTable.id, id));
   if (user.length === 0) {
     return null;
   }
   return user[0];
 }
 
-async function create({ tx, user }: { tx?: Transaction; user: NewUser }): Promise<User> {
-  const client = tx ?? db;
-  const createdUser = await client.insert(usersTable).values(user).returning();
-  if (createdUser.length === 0) {
-    throw new Error("userRepository: couldn't create user");
-  }
-  return createdUser[0];
-}
-
 async function getAdminUserCount({ tx }: { tx?: Transaction } = {}): Promise<number> {
   const client = tx ?? db;
   const result = await client
     .select({ count: count() })
-    .from(usersTable)
-    .where(and(eq(usersTable.isAdmin, true), isNull(usersTable.deletedAt)));
+    .from(userTable)
+    .where(eq(userTable.role, "admin"));
 
   return result[0].count;
+}
+
+async function setUserRole(userId: string, role: "user" | "admin"): Promise<User | null> {
+  const user = await db.update(userTable).set({ role }).where(eq(userTable.id, userId)).returning();
+  if (user.length === 0) {
+    return null;
+  }
+  return user[0];
 }
 
 export default {
   getAll,
   getById,
-  create,
   getAdminUserCount,
+  setUserRole,
 };

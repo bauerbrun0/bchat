@@ -2,7 +2,9 @@ import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { z, ZodError } from "zod";
 
-export const t = initTRPC.create({
+import type { Context } from "./context";
+
+export const t = initTRPC.context<Context>().create({
   transformer: superjson,
   errorFormatter(opts) {
     const { shape, error } = opts;

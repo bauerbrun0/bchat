@@ -1,8 +1,6 @@
-import { useMutation } from "@tanstack/react-query";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-
-import type { CustomTRPCClientValidationError } from "#/trpc/server/types";
+import { z } from "zod";
 
 import { Button } from "#/components/ui/button";
 import {
@@ -17,46 +15,79 @@ import { Field, FieldDescription, FieldGroup, FieldLabel } from "#/components/ui
 import { Input } from "#/components/ui/input";
 import { Spinner } from "#/components/ui/spinner";
 import { toast } from "#/components/ui/toast";
-import { useTRPC } from "#/trpc/client/react";
-import { isCustomTRPCClientValidationError } from "#/trpc/client/utils";
+import { authClient } from "#/lib/auth/client";
+import { getSession } from "#/lib/auth/functions";
 
 export const Route = createFileRoute("/login")({
+  beforeLoad: async ({ context }) => {
+    const isServerInitialized = await context.queryClient.query(
+      context.trpc.serverInfo.getIsInitialized.queryOptions(),
+    );
+    if (!isServerInitialized) {
+      throw redirect({
+        to: "/setup",
+      });
+    }
+
+    const session = await getSession();
+    if (session) {
+      throw redirect({
+        to: "/app",
+      });
+    }
+  },
+  validateSearch: z.object({
+    redirect: z.string().optional(),
+  }),
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const trpc = useTRPC();
-  const loginMutation = useMutation(trpc.users.loginUser.mutationOptions());
-
   const navigate = useNavigate();
+  const { redirect } = Route.useSearch();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const [fieldErrors, setFieldErrors] = useState<
-    CustomTRPCClientValidationError["data"]["zodError"]["fieldErrors"]
-  >({});
+  const [fieldErrors, setFieldErrors] = useState<{
+    username: string | null;
+    password: string | null;
+  }>({ username: null, password: null });
+
+  function clearFieldErrors() {
+    setFieldErrors({ username: null, password: null });
+  }
 
   async function onSubmit() {
-    try {
-      await loginMutation.mutateAsync({ username, password });
-      navigate({ to: "/" });
-    } catch (error: unknown) {
-      if (isCustomTRPCClientValidationError(error)) {
-        setFieldErrors(error.data.zodError.fieldErrors);
-        return;
-      }
+    setLoading(true);
+    clearFieldErrors();
+    const { data, error } = await authClient.signIn.username({
+      username,
+      password,
+    });
+    setLoading(false);
 
-      setFieldErrors({});
-
-      const description =
-        error instanceof Error ? error.message : "An error occurred while logging in.";
+    if (!error) {
+      await navigate({ to: redirect ?? "/app" });
       toast.add({
-        type: "error",
-        title: "Something went wrong",
-        description: description,
+        type: "info",
+        title: "Login successful.",
+        description: `Welcome back ${data.user.username}!`,
       });
+      return;
     }
+
+    if (error.code === "INVALID_USERNAME_OR_PASSWORD") {
+      setFieldErrors({ ...fieldErrors, password: "Invalid username or password." });
+      return;
+    }
+
+    toast.add({
+      type: "error",
+      title: "Something went wrong",
+      description: error.message,
+    });
   }
 
   return (
@@ -72,37 +103,33 @@ function RouteComponent() {
               e.preventDefault();
               void onSubmit();
             }}
-            id="setupForm"
+            id="loginForm"
           >
             <FieldGroup>
-              <Field data-invalid={"username" in fieldErrors}>
+              <Field data-invalid={!!fieldErrors.username}>
                 <FieldLabel htmlFor="username">Username</FieldLabel>
                 <Input
                   type="text"
                   id="username"
                   value={username}
                   onChange={({ target }) => setUsername(target.value)}
-                  aria-invalid={"username" in fieldErrors}
+                  aria-invalid={!!fieldErrors.username}
                 />
-                {"username" in fieldErrors && (
-                  <FieldDescription>
-                    {(fieldErrors.username as Array<string>).join(", ")}
-                  </FieldDescription>
+                {fieldErrors.username && (
+                  <FieldDescription>{fieldErrors.username}</FieldDescription>
                 )}
               </Field>
-              <Field data-invalid={"password" in fieldErrors}>
+              <Field data-invalid={!!fieldErrors.password}>
                 <FieldLabel htmlFor="password">Password</FieldLabel>
                 <Input
                   type="password"
                   id="password"
                   value={password}
                   onChange={({ target }) => setPassword(target.value)}
-                  aria-invalid={"password" in fieldErrors}
+                  aria-invalid={!!fieldErrors.password}
                 />
-                {"password" in fieldErrors && (
-                  <FieldDescription>
-                    {(fieldErrors.password as Array<string>).join(", ")}
-                  </FieldDescription>
+                {fieldErrors.password && (
+                  <FieldDescription>{fieldErrors.password}</FieldDescription>
                 )}
               </Field>
             </FieldGroup>
@@ -110,13 +137,14 @@ function RouteComponent() {
         </CardContent>
         <CardFooter>
           <Button
-            form="setupForm"
+            type="submit"
+            form="loginForm"
             className="w-full"
-            onClick={onSubmit}
-            disabled={loginMutation.isPending}
+            onSubmit={onSubmit}
+            disabled={loading}
           >
             Login
-            {loginMutation.isPending && <Spinner data-icon="inline-start" />}
+            {loading && <Spinner data-icon="inline-start" />}
           </Button>
         </CardFooter>
       </Card>

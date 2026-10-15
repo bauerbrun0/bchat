@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 
 import type { CustomTRPCClientValidationError } from "#/trpc/server/types";
@@ -21,6 +21,16 @@ import { useTRPC } from "#/trpc/client/react";
 import { isCustomTRPCClientValidationError } from "#/trpc/client/utils";
 
 export const Route = createFileRoute("/setup")({
+  beforeLoad: async ({ context }) => {
+    const isServerInitialized = await context.queryClient.query(
+      context.trpc.serverInfo.getIsInitialized.queryOptions(),
+    );
+    if (isServerInitialized) {
+      throw redirect({
+        to: "/app",
+      });
+    }
+  },
   component: RouteComponent,
 });
 
@@ -44,7 +54,6 @@ function RouteComponent() {
         username,
         password,
         confirmPassword,
-        isAdmin: true,
       });
       navigate({ to: "/login" });
       toast.add({

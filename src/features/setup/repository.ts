@@ -5,19 +5,7 @@ import type { Transaction } from "#/db";
 import { db } from "#/db";
 import { user as userTable } from "#/db/schema/auth";
 
-export type User = typeof userTable.$inferSelect;
-
-async function getAll(): Promise<User[]> {
-  return await db.select().from(userTable);
-}
-
-async function getById(id: string): Promise<User | null> {
-  const user = await db.select().from(userTable).where(eq(userTable.id, id));
-  if (user.length === 0) {
-    return null;
-  }
-  return user[0];
-}
+type User = typeof userTable.$inferSelect;
 
 async function getAdminUserCount({ tx }: { tx?: Transaction } = {}): Promise<number> {
   const client = tx ?? db;
@@ -38,8 +26,6 @@ async function setUserRole(userId: string, role: "user" | "admin"): Promise<User
 }
 
 export default {
-  getAll,
-  getById,
   getAdminUserCount,
   setUserRole,
 };

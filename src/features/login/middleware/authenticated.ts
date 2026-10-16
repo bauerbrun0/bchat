@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server";
 
-import { middleware } from "../init";
+import { middleware } from "#/lib/trpc/server/init";
 
 const authenticatedTrpcMiddleware = middleware(async (opts) => {
   if (!opts.ctx.session) {

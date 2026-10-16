@@ -1,14 +1,14 @@
 import { TRPCError } from "@trpc/server";
 
 import logger from "#/lib/logger";
-import serverInfoService from "#/services/serverInfoService";
+import { middleware } from "#/lib/trpc/server/init";
 
-import { middleware } from "../init";
+import service from "../service";
 
 const log = logger.child({ module: "serverUninitializedTrpcMiddleware" });
 
 const serverUninitializedTrpcMiddleware = middleware(async (opts) => {
-  const isServerInitialized = await serverInfoService.getIsInitialized();
+  const isServerInitialized = await service.getIsInitialized();
 
   if (isServerInitialized) {
     log.error("server_initialized", {

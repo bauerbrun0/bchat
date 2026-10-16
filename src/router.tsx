@@ -3,9 +3,9 @@ import type { ReactNode } from "react";
 import { createRouter as createTanStackRouter } from "@tanstack/react-router";
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
 
-import { getContext } from "#/routerContext";
-import { trpcClient } from "#/trpc/client";
-import { TRPCProvider } from "#/trpc/client/react";
+import { getContext } from "#/lib/router/context";
+import { trpcClient } from "#/lib/trpc/client";
+import { TRPCProvider } from "#/lib/trpc/client/react";
 
 import { routeTree } from "./routeTree.gen";
 

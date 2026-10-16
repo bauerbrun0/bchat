@@ -1,6 +1,6 @@
 import type { User } from "#/lib/auth";
+import type { NewUser } from "#/lib/schemas/user";
 import type { User as DBUser } from "#/repositories/userRepository";
-import type { NewUser } from "#/schemas/user";
 
 import { auth } from "#/lib/auth";
 import logger from "#/lib/logger";

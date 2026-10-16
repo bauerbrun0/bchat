@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 
-import type { CustomTRPCClientValidationError } from "#/trpc/server/types";
+import type { CustomTRPCClientValidationError } from "#/lib/trpc/server/types";
 
 import { Button } from "#/components/ui/button";
 import {
@@ -17,8 +17,8 @@ import { Field, FieldDescription, FieldGroup, FieldLabel } from "#/components/ui
 import { Input } from "#/components/ui/input";
 import { Spinner } from "#/components/ui/spinner";
 import { toast } from "#/components/ui/toast";
-import { useTRPC } from "#/trpc/client/react";
-import { isCustomTRPCClientValidationError } from "#/trpc/client/utils";
+import { useTRPC } from "#/lib/trpc/client/react";
+import { isCustomTRPCClientValidationError } from "#/lib/trpc/client/utils";
 
 export const Route = createFileRoute("/setup")({
   beforeLoad: async ({ context }) => {

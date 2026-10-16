@@ -2,7 +2,7 @@ import type { TRPCRouterRecord } from "@trpc/server";
 
 import { z } from "zod";
 
-import { newUserSchema } from "#/schemas/user";
+import { newUserSchema } from "#/lib/schemas/user";
 import serverInfoService from "#/services/serverInfoService";
 import userService from "#/services/userService";
 

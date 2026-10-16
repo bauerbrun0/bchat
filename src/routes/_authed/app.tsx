@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 
-import { useTRPC } from "#/trpc/client/react";
+import { useTRPC } from "#/lib/trpc/client/react";
 
 export const Route = createFileRoute("/_authed/app")({
   component: Home,

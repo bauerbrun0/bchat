@@ -35,6 +35,7 @@ CREATE TABLE "user" (
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	"username" text UNIQUE,
+	"display_username" text,
 	"role" text DEFAULT 'user' NOT NULL,
 	"banned" boolean DEFAULT false,
 	"ban_reason" text,

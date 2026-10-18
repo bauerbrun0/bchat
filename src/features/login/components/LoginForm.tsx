@@ -1,5 +1,4 @@
-import { useNavigate } from "@tanstack/react-router";
-import { getRouteApi } from "@tanstack/react-router";
+import { useNavigate, getRouteApi } from "@tanstack/react-router";
 import { useState } from "react";
 
 import { Button } from "#/components/ui/button";
@@ -66,7 +65,7 @@ export default function LoginForm() {
   }
 
   return (
-    <Card className="h-fit max-w-md sm:w-full">
+    <Card className="h-fit w-full max-w-md">
       <CardHeader>
         <CardTitle>Login</CardTitle>
         <CardDescription>Log in using your username and password.</CardDescription>

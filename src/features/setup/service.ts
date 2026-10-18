@@ -27,6 +27,7 @@ async function createInitialAdmin(admin: InitialAdmin): Promise<User> {
     body: {
       email: `${admin.username}@users.invalid`,
       username: admin.username,
+      displayUsername: admin.username,
       password: admin.password,
       name: "",
     },

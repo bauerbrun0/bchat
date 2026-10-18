@@ -68,7 +68,7 @@ export default function SetupForm() {
   }
 
   return (
-    <Card className=" h-fit max-w-md sm:w-full">
+    <Card className="h-fit w-full max-w-md">
       <CardHeader>
         <CardTitle>Server setup</CardTitle>
         <CardDescription>Create an admin user to initialize the server.</CardDescription>

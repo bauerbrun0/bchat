@@ -26,13 +26,7 @@ export const auth = betterAuth({
       },
     },
   },
-  plugins: [
-    username({
-      displayUsername: false,
-    }),
-    admin(),
-    tanstackStartCookies(),
-  ],
+  plugins: [username(), admin(), tanstackStartCookies()],
 });
 
 export type Session = typeof auth.$Infer.Session;

@@ -1,7 +1,7 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "8f94f605-a798-4429-abd7-dd81fa87a3ab",
+  "id": "a55255dd-af62-4acd-ba85-1f0c1630dacb",
   "prevIds": ["00000000-0000-0000-0000-000000000000"],
   "ddl": [
     {
@@ -414,6 +414,19 @@
       "generated": null,
       "identity": null,
       "name": "username",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "user"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "display_username",
       "entityType": "columns",
       "schema": "public",
       "table": "user"

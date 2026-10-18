@@ -1,5 +1,7 @@
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader } from "#/components/ui/sidebar";
 
+import UserDropdownMenu from "./UserDropdownMenu";
+
 export default function AppSidebar() {
   return (
     <Sidebar variant="inset">
@@ -8,7 +10,7 @@ export default function AppSidebar() {
         <div>Sidebar content</div>
       </SidebarContent>
       <SidebarFooter>
-        <div>user</div>
+        <UserDropdownMenu />
       </SidebarFooter>
     </Sidebar>
   );

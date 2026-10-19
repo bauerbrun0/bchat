@@ -13,6 +13,7 @@ import {
 import { SidebarMenuButton, useSidebar } from "#/components/ui/sidebar";
 import { toast } from "#/components/ui/toast";
 import UserAvatar from "#/components/UserAvatar";
+import { settingsStore } from "#/features/settings/store";
 import { authClient } from "#/lib/auth/client";
 
 export default function UserDropdownMenu() {
@@ -72,7 +73,7 @@ export default function UserDropdownMenu() {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => settingsStore.actions.setDialogOpen(true)}>
               <IconSettings />
               Settings
             </DropdownMenuItem>

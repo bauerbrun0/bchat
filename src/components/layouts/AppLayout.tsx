@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 import AppSidebar from "#/components/layouts/AppSidebar";
-import SettingsDialog from "#/features/settings/components/SettingsDialog";
+import SettingsDialog from "#/features/settings/components/dialog/SettingsDialog";
 
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "../ui/sidebar";
 

@@ -149,11 +149,13 @@ function Sidebar({
   className,
   children,
   dir,
+  settingsSidebar = false,
   ...props
 }: React.ComponentProps<"div"> & {
   side?: "left" | "right";
   variant?: "sidebar" | "floating" | "inset";
   collapsible?: "offcanvas" | "icon" | "none";
+  settingsSidebar?: boolean;
 }) {
   const { isMobile, state, openMobile, setOpenMobile } = useSidebar();
 
@@ -180,6 +182,7 @@ function Sidebar({
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
+          settingsSidebar={settingsSidebar}
           className="w-(--sidebar-width)! bg-sidebar p-0 text-sidebar-foreground [&>button]:hidden"
           style={
             {

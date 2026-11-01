@@ -21,7 +21,7 @@ export default function SettingsDialogHeader() {
   const isMobile = useIsMobile();
 
   return (
-    <DialogHeader className="my-6 flex flex-row items-center gap-4">
+    <DialogHeader className="my-6 flex flex-row items-center gap-4 px-6">
       {isMobile && <SidebarTrigger />}
       <div className="grow">
         <Breadcrumb>

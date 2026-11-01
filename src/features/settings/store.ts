@@ -12,21 +12,26 @@ const initialSettingsItem = initialSettingsGroup.items.find(
 export const settingsStore = createStore<
   {
     dialogOpen: boolean;
+    newUserDialogOpen: boolean;
     selectedSettingsGroup: SettingsGroup;
     selectedSettingsItem: SettingsItem;
   },
   {
     setDialogOpen: (value: boolean) => void;
+    setNewUserDialogOpen: (value: boolean) => void;
     setSelectedSettingsItem: (name: SettingsItemName) => void;
   }
 >(
   {
     dialogOpen: false,
+    newUserDialogOpen: false,
     selectedSettingsGroup: initialSettingsGroup,
     selectedSettingsItem: initialSettingsItem,
   },
   ({ setState }) => ({
     setDialogOpen: (value: boolean) => setState((prev) => ({ ...prev, dialogOpen: value })),
+    setNewUserDialogOpen: (value: boolean) =>
+      setState((prev) => ({ ...prev, newUserDialogOpen: value })),
     setSelectedSettingsItem: (name: SettingsItemName) =>
       setState((prev) => {
         for (const group of settingGroups) {

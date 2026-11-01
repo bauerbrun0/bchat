@@ -3,10 +3,11 @@ import { cn } from "cn";
 
 import { useIsMobile } from "#/components/hooks/use-mobile";
 import { Dialog, DialogContent } from "#/components/ui/dialog";
+import { ScrollArea } from "#/components/ui/scroll-area";
 import { SidebarProvider } from "#/components/ui/sidebar";
 
+import UserManagementSettings from "../../admin/user-management/components/UserManagementSettings";
 import { settingsStore } from "../../store";
-import UserManagementSettings from "../admin/user-management/UserManagementSettings";
 import SettingsSidebar from "../sidebar/SettingsSidebar";
 import SettingsDialogHeader from "./SettingsDialogHeader";
 
@@ -24,17 +25,24 @@ export default function SettingsDialog() {
         )}
         showCloseButton={false}
       >
-        <div className="h-full w-full">
-          <SidebarProvider className="h-full w-full items-start">
-            <SettingsSidebar />
-            <div className="w-full px-6">
-              <SettingsDialogHeader />
-              <main>
+        <SidebarProvider
+          className="min-h-0! min-w-0!"
+          style={
+            {
+              "--sidebar-width": "15rem",
+            } as React.CSSProperties
+          }
+        >
+          <SettingsSidebar />
+          <div className="flex min-w-0 flex-1 flex-col">
+            <SettingsDialogHeader />
+            <main className="flex min-h-0 flex-1 flex-col px-4 lg:px-40">
+              <ScrollArea className="flex min-h-0 flex-1 px-3 md:px-5">
                 {selectedItem.name === "admin_user_management" && <UserManagementSettings />}
-              </main>
-            </div>
-          </SidebarProvider>
-        </div>
+              </ScrollArea>
+            </main>
+          </div>
+        </SidebarProvider>
       </DialogContent>
     </Dialog>
   );

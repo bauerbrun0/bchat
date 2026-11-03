@@ -1,14 +1,13 @@
 import { drizzleAdapter } from "@better-auth/drizzle-adapter/relations-v2";
 import { betterAuth } from "better-auth";
-import { APIError, createAuthMiddleware } from "better-auth/api";
 import { username } from "better-auth/plugins";
 import { admin } from "better-auth/plugins";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
-import { z } from "zod";
 
 import { db } from "#/db";
 import * as schema from "#/db/schema/auth";
-import { createUserSchema } from "#/features/settings/admin/user-management/create-user/userSchema";
+
+import { customValidations } from "./plugins/customValidations";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -34,25 +33,8 @@ export const auth = betterAuth({
       },
     },
   },
-  hooks: {
-    before: createAuthMiddleware(async (ctx) => {
-      if (ctx.path === "/admin/create-user") {
-        try {
-          createUserSchema.parse(ctx.body);
-        } catch (error: unknown) {
-          if (error instanceof z.ZodError) {
-            throw new APIError("BAD_REQUEST", {
-              code: "VALIDATION_ERROR",
-              cause: z.treeifyError(error),
-            });
-          }
-        }
-        return;
-      }
-    }),
-  },
   disabledPaths: ["/is-username-available"],
-  plugins: [username(), admin(), tanstackStartCookies()],
+  plugins: [username(), admin(), customValidations(), tanstackStartCookies()],
 });
 
 export type Session = typeof auth.$Infer.Session;

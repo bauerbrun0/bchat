@@ -7,7 +7,10 @@ import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { db } from "#/db";
 import * as schema from "#/db/schema/auth";
 
+import logger from "../logger";
 import { customValidations } from "./plugins/customValidations";
+
+const log = logger.child({ module: "betterAuth" });
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -35,6 +38,11 @@ export const auth = betterAuth({
   },
   disabledPaths: ["/is-username-available"],
   plugins: [username(), admin(), customValidations(), tanstackStartCookies()],
+  logger: {
+    log: (level, message, ...args) => {
+      log.log(level, message, args);
+    },
+  },
 });
 
 export type Session = typeof auth.$Infer.Session;

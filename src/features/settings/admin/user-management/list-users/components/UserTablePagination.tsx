@@ -37,7 +37,7 @@ export default function UserTablePagination({
 }) {
   const pagination = useSelector(userManagementStore, (state) => state.pagination);
 
-  const paginationNumbers = useMemo<number[]>(() => {
+  const pageNumbers = useMemo<number[]>(() => {
     const numbers: number[] = [];
     const currentPage = pagination.pageIndex + 1;
     const pageCount = table.getPageCount();
@@ -84,12 +84,12 @@ export default function UserTablePagination({
             />
           </PaginationItem>
 
-          {paginationNumbers[0] !== 1 && (
+          {pageNumbers[0] !== 1 && (
             <PaginationItem className="hidden md:block">
               <PaginationEllipsis />
             </PaginationItem>
           )}
-          {paginationNumbers.map((n) => (
+          {pageNumbers.map((n) => (
             <PaginationItem key={n} className="hidden md:block">
               <PaginationLink
                 onClick={() => table.setPageIndex(n - 1)}
@@ -99,7 +99,7 @@ export default function UserTablePagination({
               </PaginationLink>
             </PaginationItem>
           ))}
-          {paginationNumbers.at(-1) !== table.getPageCount() && (
+          {pageNumbers.at(-1) !== table.getPageCount() && (
             <PaginationItem className="hidden md:block">
               <PaginationEllipsis />
             </PaginationItem>

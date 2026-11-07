@@ -4,7 +4,7 @@ import type { User } from "#/lib/auth";
 
 import UserAvatar from "#/components/UserAvatar";
 
-import type { userTableFeatures } from "./userTableFeatures";
+import type { userTableFeatures } from "./features";
 
 const columnHelper = createColumnHelper<typeof userTableFeatures, User>();
 

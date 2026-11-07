@@ -15,9 +15,9 @@ import {
 } from "#/components/ui/table";
 
 import { userManagementStore } from "../../store";
-import { userTableColumns } from "./userTableColumns";
-import { userTableFeatures } from "./userTableFeatures";
-import UserTablePagination from "./UserTablePagination";
+import { userTableColumns } from "./columns";
+import { userTableFeatures } from "./features";
+import UserTablePagination from "./Pagination";
 
 export default function UserTable({ data }: { data: { rowCount: number; users: User[] } }) {
   const pagination = useSelector(userManagementStore, (state) => state.pagination);

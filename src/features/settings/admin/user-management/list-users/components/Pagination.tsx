@@ -26,7 +26,7 @@ import {
   SelectValue,
 } from "#/components/ui/select";
 
-import type { userTableFeatures } from "./userTableFeatures";
+import type { userTableFeatures } from "./features";
 
 import { userManagementStore } from "../../store";
 

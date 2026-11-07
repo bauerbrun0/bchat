@@ -1,3 +1,3 @@
-import { tableFeatures } from "@tanstack/react-table";
+import { tableFeatures, rowPaginationFeature } from "@tanstack/react-table";
 
-export const userTableFeatures = tableFeatures({});
+export const userTableFeatures = tableFeatures({ rowPaginationFeature });

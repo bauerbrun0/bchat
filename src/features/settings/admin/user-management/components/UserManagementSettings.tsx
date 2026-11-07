@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useSelector } from "@tanstack/react-store";
 
 import { Button } from "#/components/ui/button";
 import { settingsStore } from "#/features/settings/store";
@@ -6,11 +7,17 @@ import { useTRPC } from "#/lib/trpc/client/react";
 
 import CreateUserDialog from "../create-user/components/CreateUserDialog";
 import UserTable from "../list-users/components/UserTable";
+import { userManagementStore } from "../store";
 
 export default function UserManagementSettings() {
+  const pagination = useSelector(userManagementStore, (state) => state.pagination);
+
   const trpc = useTRPC();
   const { data, isPending, isRefetching, isError, error, refetch } = useQuery(
-    trpc.users.getAll.queryOptions(),
+    trpc.admin.userManagement.listUsers.queryOptions({
+      limit: pagination.pageSize,
+      offset: pagination.pageIndex * pagination.pageSize,
+    }),
   );
 
   return (

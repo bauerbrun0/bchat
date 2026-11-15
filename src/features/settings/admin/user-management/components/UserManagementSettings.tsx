@@ -7,16 +7,35 @@ import { useTRPC } from "#/lib/trpc/client/react";
 
 import CreateUserDialog from "../create-user/components/CreateUserDialog";
 import UserTable from "../list-users/components/UserTable";
-import { userManagementStore } from "../store";
+import { listUsersStore } from "../list-users/store";
 
 export default function UserManagementSettings() {
-  const pagination = useSelector(userManagementStore, (state) => state.pagination);
+  const [
+    pagination,
+    usernameFilter,
+    displayUsernameFilter,
+    roleFilter,
+    createdFilter,
+    updatedFilter,
+  ] = useSelector(listUsersStore, (state) => [
+    state.pagination,
+    state.usernameFilter,
+    state.displayUsernameFilter,
+    state.roleFilter,
+    state.createdFilter,
+    state.updatedFilter,
+  ]);
 
   const trpc = useTRPC();
   const { data, isPending, isRefetching, isError, error, refetch } = useQuery(
     trpc.admin.userManagement.listUsers.queryOptions({
       limit: pagination.pageSize,
       offset: pagination.pageIndex * pagination.pageSize,
+      usernameFilter,
+      displayUsernameFilter,
+      roleFilter,
+      createdFilter,
+      updatedFilter,
     }),
   );
 

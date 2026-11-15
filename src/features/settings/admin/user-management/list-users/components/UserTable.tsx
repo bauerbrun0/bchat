@@ -14,13 +14,13 @@ import {
   TableRow,
 } from "#/components/ui/table";
 
-import { userManagementStore } from "../../store";
+import { listUsersStore } from "../store";
 import { userTableColumns } from "./columns";
 import { userTableFeatures } from "./features";
 import UserTablePagination from "./Pagination";
 
 export default function UserTable({ data }: { data: { rowCount: number; users: User[] } }) {
-  const pagination = useSelector(userManagementStore, (state) => state.pagination);
+  const pagination = useSelector(listUsersStore, (state) => state.pagination);
 
   const table = useTable({
     key: "admin-user-management-table",
@@ -31,7 +31,7 @@ export default function UserTable({ data }: { data: { rowCount: number; users: U
     data: data.users,
     state: { pagination },
     onPaginationChange: (updater) =>
-      userManagementStore.actions.setPagination(
+      listUsersStore.actions.setPagination(
         updater instanceof Function ? updater(pagination) : updater,
       ),
   });

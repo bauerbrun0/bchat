@@ -28,14 +28,14 @@ import {
 
 import type { userTableFeatures } from "./features";
 
-import { userManagementStore } from "../../store";
+import { listUsersStore } from "../store";
 
 export default function UserTablePagination({
   table,
 }: {
   table: Table<typeof userTableFeatures, User>;
 }) {
-  const pagination = useSelector(userManagementStore, (state) => state.pagination);
+  const pagination = useSelector(listUsersStore, (state) => state.pagination);
 
   const pageNumbers = useMemo<number[]>(() => {
     const numbers: number[] = [];

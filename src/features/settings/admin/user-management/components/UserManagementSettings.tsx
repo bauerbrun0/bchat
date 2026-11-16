@@ -6,6 +6,8 @@ import { settingsStore } from "#/features/settings/store";
 import { useTRPC } from "#/lib/trpc/client/react";
 
 import CreateUserDialog from "../create-user/components/CreateUserDialog";
+import UsersErrorState from "../list-users/components/UsersErrorState";
+import UsersLoadingState from "../list-users/components/UsersLoadingState";
 import UserTable from "../list-users/components/UserTable";
 import { listUsersStore } from "../list-users/store";
 
@@ -44,9 +46,9 @@ export default function UserManagementSettings() {
       <div>
         <h2 className="mb-6 font-bold">Users</h2>
         {isPending || isRefetching ? (
-          <span>Loading users...</span>
+          <UsersLoadingState />
         ) : isError ? (
-          <span>Error while loading users: {error.message}</span>
+          <UsersErrorState message={error.message} retry={refetch} />
         ) : (
           <UserTable data={data} />
         )}

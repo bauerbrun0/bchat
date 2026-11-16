@@ -39,8 +39,12 @@ export default function UserTablePagination({
 
   const pageNumbers = useMemo<number[]>(() => {
     const numbers: number[] = [];
-    const currentPage = pagination.pageIndex + 1;
     const pageCount = table.getPageCount();
+    if (pageCount === 0) {
+      return numbers;
+    }
+
+    const currentPage = pagination.pageIndex + 1;
     numbers.push(currentPage);
 
     for (let i = 1; i <= 2; i++) {
@@ -84,7 +88,7 @@ export default function UserTablePagination({
             />
           </PaginationItem>
 
-          {pageNumbers[0] !== 1 && (
+          {pageNumbers.length > 0 && pageNumbers[0] !== 1 && (
             <PaginationItem className="hidden md:block">
               <PaginationEllipsis />
             </PaginationItem>
@@ -99,7 +103,7 @@ export default function UserTablePagination({
               </PaginationLink>
             </PaginationItem>
           ))}
-          {pageNumbers.at(-1) !== table.getPageCount() && (
+          {pageNumbers.length > 0 && pageNumbers.at(-1) !== table.getPageCount() && (
             <PaginationItem className="hidden md:block">
               <PaginationEllipsis />
             </PaginationItem>

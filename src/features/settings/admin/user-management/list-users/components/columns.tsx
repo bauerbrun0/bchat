@@ -4,7 +4,6 @@ import { z } from "zod";
 
 import type { User } from "#/lib/auth";
 
-import { Button } from "#/components/ui/button";
 import UserAvatar from "#/components/UserAvatar";
 import { role } from "#/lib/schemas/user";
 
@@ -13,6 +12,7 @@ import type { userTableFeatures } from "./features";
 import { listUsersStore } from "../store";
 import DateRangeFilterPopover from "./DateRangeFilterPopover";
 import MultiSelectFilterPopover from "./MultiSelectFilterPopover";
+import SortButton from "./SortButton";
 import TextFilterPopover from "./TextFilterPopover";
 
 const columnHelper = createColumnHelper<typeof userTableFeatures, User>();
@@ -24,7 +24,7 @@ export const userTableColumns = columnHelper.columns([
 
       return (
         <div className="flex items-center justify-between gap-2">
-          <Button variant="ghost">Username</Button>
+          <SortButton field="username" label="Username" />
           <TextFilterPopover
             storedFilter={storedUsernameFilter}
             storeFilter={listUsersStore.actions.setUsernameFilter}
@@ -53,7 +53,7 @@ export const userTableColumns = columnHelper.columns([
 
       return (
         <div className="flex items-center justify-between gap-2">
-          <Button variant="ghost">Display Name</Button>
+          <SortButton field="displayUsername" label="Display Name" />
           <TextFilterPopover
             storedFilter={storedDisplayUsernameFilter}
             storeFilter={listUsersStore.actions.setDisplayUsernameFilter}
@@ -68,7 +68,7 @@ export const userTableColumns = columnHelper.columns([
 
       return (
         <div className="flex items-center justify-between gap-2">
-          <Button variant="ghost">Role</Button>
+          <SortButton field="role" label="Role" />
           <MultiSelectFilterPopover
             items={[
               { label: "User", value: "user" },
@@ -90,14 +90,14 @@ export const userTableColumns = columnHelper.columns([
   }),
   columnHelper.accessor("createdAt", {
     header: () => {
-      const storedCreatedFilter = useSelector(listUsersStore, (state) => state.createdFilter);
+      const storedCreatedFilter = useSelector(listUsersStore, (state) => state.createdAtFilter);
 
       return (
         <div className="flex items-center justify-between gap-2">
-          <Button variant="ghost">Created</Button>
+          <SortButton field="createdAt" label="Created" />
           <DateRangeFilterPopover
             storedFilter={storedCreatedFilter}
-            storeFilter={listUsersStore.actions.setCreatedFilter}
+            storeFilter={listUsersStore.actions.setCreatedAtFilter}
           />
         </div>
       );
@@ -113,14 +113,14 @@ export const userTableColumns = columnHelper.columns([
   }),
   columnHelper.accessor("updatedAt", {
     header: () => {
-      const storedUpdatedFilter = useSelector(listUsersStore, (state) => state.updatedFilter);
+      const storedUpdatedFilter = useSelector(listUsersStore, (state) => state.updatedAtFilter);
 
       return (
         <div className="flex items-center justify-between gap-2">
-          <Button variant="ghost">Updated</Button>
+          <SortButton field="updatedAt" label="Updated" />
           <DateRangeFilterPopover
             storedFilter={storedUpdatedFilter}
-            storeFilter={listUsersStore.actions.setUpdatedFilter}
+            storeFilter={listUsersStore.actions.setUpdatedAtFilter}
           />
         </div>
       );

@@ -1,6 +1,7 @@
 import { count, eq } from "drizzle-orm";
 
 import type { Transaction } from "#/db";
+import type { Role } from "#/lib/schemas/user";
 
 import { db } from "#/db";
 import { user as userTable } from "#/db/schema/auth";
@@ -17,7 +18,7 @@ async function getAdminUserCount({ tx }: { tx?: Transaction } = {}): Promise<num
   return result[0].count;
 }
 
-async function setUserRole(userId: string, role: "user" | "admin"): Promise<User | null> {
+async function setUserRole(userId: string, role: Role): Promise<User | null> {
   const user = await db.update(userTable).set({ role }).where(eq(userTable.id, userId)).returning();
   if (user.length === 0) {
     return null;

@@ -28,3 +28,5 @@ export const displayUsername = z
   });
 
 export const role = z.enum(["user", "admin"]);
+
+export type Role = z.infer<typeof role>;

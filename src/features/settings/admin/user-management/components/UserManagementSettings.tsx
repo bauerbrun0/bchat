@@ -17,15 +17,17 @@ export default function UserManagementSettings() {
     usernameFilter,
     displayUsernameFilter,
     roleFilter,
-    createdFilter,
-    updatedFilter,
+    createdAtFilter,
+    updatedAtFilter,
+    sort,
   ] = useSelector(listUsersStore, (state) => [
     state.pagination,
     state.usernameFilter,
     state.displayUsernameFilter,
     state.roleFilter,
-    state.createdFilter,
-    state.updatedFilter,
+    state.createdAtFilter,
+    state.updatedAtFilter,
+    state.sort,
   ]);
 
   const trpc = useTRPC();
@@ -36,8 +38,9 @@ export default function UserManagementSettings() {
       usernameFilter,
       displayUsernameFilter,
       roleFilter,
-      createdFilter,
-      updatedFilter,
+      createdAtFilter,
+      updatedAtFilter,
+      sort,
     }),
   );
 

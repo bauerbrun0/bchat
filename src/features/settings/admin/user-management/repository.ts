@@ -1,6 +1,6 @@
 import type { SQL } from "drizzle-orm";
 
-import { and, count, eq, gte, lte, ilike, or } from "drizzle-orm";
+import { and, count, eq, gte, lte, ilike, or, asc, desc } from "drizzle-orm";
 
 import { db } from "#/db";
 import { user as userTable } from "#/db/schema/auth";
@@ -15,19 +15,14 @@ async function listUsers({
   usernameFilter,
   displayUsernameFilter,
   roleFilter,
-  createdFilter,
-  updatedFilter,
+  createdAtFilter,
+  updatedAtFilter,
+  sort,
 }: ListUsersOpts): Promise<{ rowCount: number; users: User[] }> {
   return db.transaction(
     async (tx) => {
       let rowCountQuery = tx.select({ rowCount: count() }).from(userTable).$dynamic();
-      let usersQuery = tx
-        .select()
-        .from(userTable)
-        .orderBy(userTable.id)
-        .limit(limit)
-        .offset(offset)
-        .$dynamic();
+      let usersQuery = tx.select().from(userTable).limit(limit).offset(offset).$dynamic();
 
       let filters: SQL<unknown>[] = [];
 
@@ -48,17 +43,17 @@ async function listUsers({
         if (roleOrClause) filters.push(roleOrClause);
       }
 
-      if (createdFilter && createdFilter.from && createdFilter.to) {
+      if (createdAtFilter && createdAtFilter.from && createdAtFilter.to) {
         filters.push(
-          gte(userTable.createdAt, createdFilter.from),
-          lte(userTable.createdAt, createdFilter.to),
+          gte(userTable.createdAt, createdAtFilter.from),
+          lte(userTable.createdAt, createdAtFilter.to),
         );
       }
 
-      if (updatedFilter && updatedFilter.from && updatedFilter.to) {
+      if (updatedAtFilter && updatedAtFilter.from && updatedAtFilter.to) {
         filters.push(
-          gte(userTable.updatedAt, updatedFilter.from),
-          lte(userTable.updatedAt, updatedFilter.to),
+          gte(userTable.updatedAt, updatedAtFilter.from),
+          lte(userTable.updatedAt, updatedAtFilter.to),
         );
       }
 
@@ -67,6 +62,14 @@ async function listUsers({
       if (whereClause) {
         rowCountQuery = rowCountQuery.where(whereClause);
         usersQuery = usersQuery.where(whereClause);
+      }
+
+      if (sort) {
+        usersQuery = usersQuery.orderBy(
+          sort.order === "asc" ? asc(userTable[sort.by]) : desc(userTable[sort.by]),
+        );
+      } else {
+        usersQuery = usersQuery.orderBy(userTable.createdAt);
       }
 
       const [{ rowCount }] = await rowCountQuery;
